@@ -45,11 +45,11 @@ jobs:
           cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/test/
           cd out
           git init
-          git remote add origin https://github.com/NakiriYuuzu/Portfolio.git
+          git remote add origin https://github.com/${{ secrets.GITHUB_REPOSITORY }}.git
           git checkout -b test
           git add .
           git commit -m "Deploy to GitHub Pages (test)"
-          git push -f origin test
+          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ secrets.GITHUB_REPOSITORY }}.git test
 
       - name: Create PR to master
         if: success()
@@ -83,14 +83,17 @@ jobs:
       - name: Install dependencies and build
         run: ./gradlew clean build
 
-      - name: Deploy to GitHub Pages (master)
+      - name: Deploy to GitHub Pages (gh-pages)
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           ./gradlew wasmJsBrowserDistribution
-          cd composeApp/build/dist/wasmJs/productionExecutable
+          mkdir -p out
+          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/
+          cd out
           git init
-          git remote add origin https://github.com/NakiriYuuzu/Portfolio.git
+          git remote add origin https://github.com/nakiriyuuzu/nakiriyuuzu.github.io.git
+          git checkout -b master
           git add .
           git commit -m "Deploy to GitHub Pages (master)"
-          git push -f origin gh-pages:master
+          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/<your-username>/nakiriyuuzu.github.io .git master
