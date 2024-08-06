@@ -43,8 +43,8 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           ./gradlew wasmJsBrowserDistribution
-          mkdir -p out/test
-          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/test/
+          mkdir -p out
+          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/
           cd out
           git init
           git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
