@@ -11,7 +11,7 @@ on:
 
 jobs:
   test-and-deploy-to-test-pages:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
 
     steps:
@@ -41,16 +41,17 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           ./gradlew wasmJsBrowserDistribution
           mkdir -p out/test
           cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/test/
           cd out
           git init
-          git remote add origin https://github.com/${{ github.repository }}.git
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git checkout -b test
           git add .
           git commit -m "Deploy to GitHub Pages (test)"
-          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git test
+          git push -f origin test
 
       - name: Create PR to master
         if: success()
@@ -62,7 +63,7 @@ jobs:
           body: 'Auto-generated PR to merge changes from develop to master.'
 
   deploy-to-release-page-master:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && github.ref == 'refs/heads/master'
 
     steps:
