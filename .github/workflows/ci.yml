@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  test-and-deploy-to-test:
+  test-and-deploy-to-gh-pages-test:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
 
@@ -17,13 +17,14 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: Set up Kotlin
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'zulu'
-          java-version: '11'
+          distribution: 'jdk'
+          java-version: '17'
+          jdk-package: 'jbr'
 
-      - name: Install dependencies
+      - name: Install dependencies and build
         run: ./gradlew clean build
 
       - name: Run tests
@@ -34,8 +35,12 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git checkout -b gh-pages
-          ./gradlew publish # 這裡假設你有一個 publish 任務來處理部署
+          ./gradlew wasmJsBrowserDistribution
+          cd composeApp/build/dist/wasmJs/productionExecutable
+          git init
+          git remote add origin https://github.com/NakiriYuuzu/Portfolio.git
+          git add .
+          git commit -m "Deploy to GitHub Pages (test)"
           git push -f origin gh-pages:test
 
       - name: Create PR to master
@@ -47,7 +52,7 @@ jobs:
           title: 'Merge develop into master'
           body: 'Auto-generated PR to merge changes from develop to master.'
 
-  deploy-to-master:
+  deploy-to-gh-pages-master:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && github.ref == 'refs/heads/master'
 
@@ -55,19 +60,24 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
 
-      - name: Set up Kotlin
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'zulu'
-          java-version: '11'
+          distribution: 'jdk'
+          java-version: '17'
+          jdk-package: 'jbr'
 
-      - name: Install dependencies
+      - name: Install dependencies and build
         run: ./gradlew clean build
 
       - name: Deploy to GitHub Pages (master)
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git checkout -b gh-pages
-          ./gradlew publish # 這裡假設你有一個 publish 任務來處理部署
+          ./gradlew wasmJsBrowserDistribution
+          cd composeApp/build/dist/wasmJs/productionExecutable
+          git init
+          git remote add origin https://github.com/NakiriYuuzu/Portfolio.git
+          git add .
+          git commit -m "Deploy to GitHub Pages (master)"
           git push -f origin gh-pages:master
