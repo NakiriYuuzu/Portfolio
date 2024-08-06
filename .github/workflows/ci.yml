@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI Assemble, Test, and Publish
 
 on:
   push:
@@ -7,21 +7,22 @@ on:
   pull_request:
     branches:
       - master
+  workflow_call:
 
 jobs:
-  test-and-deploy-to-gh-pages-test:
-    runs-on: ubuntu-latest
+  test-and-deploy-to-test-pages:
+    runs-on: macos-latest
     if: github.ref == 'refs/heads/develop'
 
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # 使用任意支持的分發版
-          java-version: '17'
+          distribution: 'zulu'
+          java-version: 17
 
       - name: Check java version
         run: java --version
@@ -33,7 +34,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test --stacktrace
 
       - name: Deploy to GitHub Pages (test)
         if: success()
@@ -45,11 +46,11 @@ jobs:
           cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/test/
           cd out
           git init
-          git remote add origin https://github.com/${{ secrets.GITHUB_REPOSITORY }}.git
+          git remote add origin https://github.com/${{ github.repository }}.git
           git checkout -b test
           git add .
           git commit -m "Deploy to GitHub Pages (test)"
-          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ secrets.GITHUB_REPOSITORY }}.git test
+          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git test
 
       - name: Create PR to master
         if: success()
@@ -60,19 +61,19 @@ jobs:
           title: 'Merge develop into master'
           body: 'Auto-generated PR to merge changes from develop to master.'
 
-  deploy-to-gh-pages-master:
-    runs-on: ubuntu-latest
+  deploy-to-release-page-master:
+    runs-on: macos-latest
     if: github.event.pull_request.merged == true && github.ref == 'refs/heads/master'
 
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # 使用任意支持的分發版
-          java-version: '17'
+          distribution: 'zulu'
+          java-version: 17
 
       - name: Check java version
         run: java --version
@@ -96,4 +97,4 @@ jobs:
           git checkout -b master
           git add .
           git commit -m "Deploy to GitHub Pages (master)"
-          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/<your-username>/nakiriyuuzu.github.io .git master
+          git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository_owner }}/nakiriyuuzu.github.io.git master
