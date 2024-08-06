@@ -20,9 +20,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'jdk'
+          distribution: 'zulu' # 使用任意支持的分發版
           java-version: '17'
-          jdk-package: 'jbr'
 
       - name: Install dependencies and build
         run: ./gradlew clean build
@@ -63,9 +62,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'jdk'
+          distribution: 'zulu' # 使用任意支持的分發版
           java-version: '17'
-          jdk-package: 'jbr'
 
       - name: Install dependencies and build
         run: ./gradlew clean build
