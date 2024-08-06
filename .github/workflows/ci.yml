@@ -12,7 +12,7 @@ on:
 jobs:
   test-and-deploy-to-test-pages:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop'
 
     steps:
       - name: Check out the repository
