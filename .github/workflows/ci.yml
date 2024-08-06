@@ -23,6 +23,9 @@ jobs:
           distribution: 'zulu' # 使用任意支持的分發版
           java-version: '17'
 
+      - name: Check java version
+        run: java --version
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
@@ -38,12 +41,15 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           ./gradlew wasmJsBrowserDistribution
-          cd composeApp/build/dist/wasmJs/productionExecutable
+          mkdir -p out/test
+          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/test/
+          cd out
           git init
           git remote add origin https://github.com/NakiriYuuzu/Portfolio.git
+          git checkout -b test
           git add .
           git commit -m "Deploy to GitHub Pages (test)"
-          git push -f origin gh-pages:test
+          git push -f origin test
 
       - name: Create PR to master
         if: success()
@@ -67,6 +73,9 @@ jobs:
         with:
           distribution: 'zulu' # 使用任意支持的分發版
           java-version: '17'
+
+      - name: Check java version
+        run: java --version
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
