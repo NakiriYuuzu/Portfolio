@@ -1,11 +1,21 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import org.koin.core.logger.PrintLogger
 
-fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = "Portfolio",
-    ) {
-        App()
+fun main() {
+    startKoin {
+        logger(PrintLogger(level = Level.DEBUG))
+        modules()
+    }
+
+    return application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = "Portfolio",
+        ) {
+            App()
+        }
     }
 }
