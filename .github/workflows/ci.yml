@@ -24,9 +24,6 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Check java version
-        run: java --version
-
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
@@ -53,14 +50,14 @@ jobs:
           git commit -m "Deploy to GitHub Pages (test)"
           git push -f origin test
 
-      - name: Create PR to master
+      - name: Create PR to release
         if: success()
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: release # 創建一個新分支來提交 PR
-          title: 'Merge develop into master'
-          body: 'Auto-generated PR to merge changes from develop to master.'
+          title: 'Merge master into release'
+          body: 'Auto-generated PR to merge changes from develop to release.'
 
   if_merged:
     if : github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
@@ -74,9 +71,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-
-      - name: Check java version
-        run: java --version
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -96,5 +90,5 @@ jobs:
           git remote add origin https://github.com/nakiriyuuzu/nakiriyuuzu.github.io.git
           git checkout -b master
           git add .
-          git commit -m "Deploy to GitHub Pages (master)"
+          git commit -m "Deploy to GitHub Pages"
           git push -f https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository_owner }}/nakiriyuuzu.github.io.git master
