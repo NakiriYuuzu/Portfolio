@@ -60,7 +60,7 @@ jobs:
           body: 'Auto-generated PR to merge changes from develop to release.'
 
   if_merged:
-    if : github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if : github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
