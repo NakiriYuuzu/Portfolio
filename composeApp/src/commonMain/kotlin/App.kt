@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicMaterialThemeState
-import core.theme.Theme
-import core.theme.seed
+import core.presentation.theme.Theme
+import core.presentation.theme.seed
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 
