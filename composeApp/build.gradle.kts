@@ -72,7 +72,7 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.bundles.koin.android)
             implementation(libs.kotlinx.coroutines.android)
-            implementation(libs.bundles.datastore)
+//            implementation(libs.bundles.datastore)
         }
         commonMain.dependencies {
             implementation(compose.ui)
@@ -94,13 +94,13 @@ kotlin {
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation(libs.bundles.datastore)
+//            implementation(libs.bundles.datastore)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.bundles.datastore)
+//            implementation(libs.bundles.datastore)
         }
     }
 

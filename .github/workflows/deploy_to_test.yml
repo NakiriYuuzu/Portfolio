@@ -51,5 +51,31 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: release
-          title: 'Merge master into release'
+          title: 'Merge develop into release'
           body: 'Auto-generated PR to merge changes from develop to release.'
+
+  create-pr-to-master:
+    runs-on: ubuntu-latest
+    needs: test-and-deploy-to-test-pages
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create temporary branch
+        run: |
+          git checkout -b temp-branch
+
+      - name: Push temporary branch
+        run: |
+          git push origin temp-branch
+
+      - name: Create PR to master
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: master
+          branch: release # 用於合併的分支
+          title: 'Merge develop into master'
+          body: 'Auto-generated PR to merge changes from develop to master.'
+          commit-message: 'Auto-generated PR to merge changes from develop to master.'
+          delete-branch: true
