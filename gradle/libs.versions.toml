@@ -29,6 +29,9 @@ coil = "3.0.0-alpha08"
 kolor = "1.7.0"
 windowSizeClass = "0.5.0"
 
+# Local
+datastore = "1.1.1"
+
 # Network
 ktor = "3.0.0-wasm2"
 
@@ -67,6 +70,10 @@ kolor-core = { module = "com.materialkolor:material-kolor", version.ref = "kolor
 windowSizeClass-core = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSizeClass" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+
+# Local
+datastore-core = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-pref = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 # Network
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -107,4 +114,5 @@ ktor = ["ktor-client-core", "ktor-client-json", "ktor-client-logging", "ktor-cli
 debug = ["kermit-core"]
 kotlinx = ["kotlinx-datetime", "kotlinx-serialization"]
 koin-core = ["koin-core", "koin-compose", "koin-compose-viewmodel"]
+datastore = ["datastore-core", "datastore-pref"]
 koin-android = ["koin-android", "koin-androidx-compose"]
