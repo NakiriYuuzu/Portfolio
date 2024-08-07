@@ -11,11 +11,10 @@ jobs:
     if: github.ref == 'refs/heads/develop'
 
     steps:
-      - name: Check out the repository
-        uses: ./.github/actions/checkout
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: ./.github/actions/setup-java
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
@@ -48,7 +47,7 @@ jobs:
 
       - name: Create PR to release
         if: success()
-        uses: ./.github/actions/create-pull-request
+        uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: release
