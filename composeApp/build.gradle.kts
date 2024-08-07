@@ -51,14 +51,16 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.android)
             implementation(libs.bundles.koin.android)
+//            implementation(libs.kotlinx.coroutines.android)
         }
         commonMain.dependencies {
             implementation(compose.ui)
@@ -72,6 +74,7 @@ kotlin {
 
             implementation(libs.bundles.ui)
             implementation(libs.bundles.core)
+            implementation(libs.bundles.coil)
             implementation(libs.bundles.ktor)
             implementation(libs.bundles.koin.core)
             implementation(libs.bundles.debug)
@@ -83,6 +86,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.okhttp)
+//            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 
@@ -110,6 +114,21 @@ android {
         }
     }
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+        }
+//        release {
+//            isDebuggable = false
+//            isMinifyEnabled = true
+//            isShrinkResources = true
+//            proguardFiles(
+//                getDefaultProguardFile("proguard-android-optimize.txt"),
+//                "proguard-rules.pro"
+//            )
+//            signingConfig = signingConfigs["debug"]
+//        }
         getByName("release") {
             isMinifyEnabled = false
         }
