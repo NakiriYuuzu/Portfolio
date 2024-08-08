@@ -20,9 +20,3 @@ internal fun Theme(
         }
     )
 }
-
-enum class ThemeMode {
-    LIGHT,
-    DARK,
-    SYSTEM
-}

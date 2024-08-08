@@ -3,35 +3,24 @@ package core.data.source
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.set
 import core.domain.source.PortfolioSource
-import core.presentation.theme.ThemeMode
 import core.util.DispatcherProvider
+import core.domain.model.DarkThemePreference
 import kotlinx.coroutines.withContext
 
 class PortfolioLocalSourceImpl(
     private val settings: Settings,
     private val dispatcherProvider: DispatcherProvider
 ) : PortfolioSource.Local {
-
-    override suspend fun getErrorMessage(): String =
+    override suspend fun getThemePreference(): DarkThemePreference =
         withContext(dispatcherProvider.io) {
-            settings.getString(ERROR_MESSAGE_KEY, "")
+            DarkThemePreference(
+                settings.getInt(DARK_MODE_KEY, DarkThemePreference.FOLLOW_SYSTEM)
+            )
         }
 
-    override suspend fun setErrorMessage(message: String) =
+    override suspend fun setThemePreference(isDarkTheme: Int) =
         withContext(dispatcherProvider.io) {
-            settings[ERROR_MESSAGE_KEY] = message
-        }
-
-    override suspend fun getThemeMode(): ThemeMode =
-        withContext(dispatcherProvider.io) {
-            settings.getString(DARK_MODE_KEY, ThemeMode.SYSTEM.name).let {
-                return@let ThemeMode.valueOf(it)
-            }
-        }
-
-    override suspend fun setThemeMode(theme: ThemeMode) =
-        withContext(dispatcherProvider.io) {
-            settings[DARK_MODE_KEY] = theme.name
+            settings[DARK_MODE_KEY] = isDarkTheme
         }
 
     override suspend fun getThemeColor(): Long =
@@ -46,7 +35,6 @@ class PortfolioLocalSourceImpl(
 
     companion object {
         private const val DARK_MODE_KEY = "DARK_MODE_KEY"
-        private const val ERROR_MESSAGE_KEY = "ERROR_MESSAGE_KEY"
         private const val THEME_COLOR_THEME_KEY = "THEME_COLOR_THEME_KEY"
     }
 }

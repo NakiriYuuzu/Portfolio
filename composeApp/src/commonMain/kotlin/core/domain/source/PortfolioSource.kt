@@ -1,6 +1,6 @@
 package core.domain.source
 
-import core.presentation.theme.ThemeMode
+import core.domain.model.DarkThemePreference
 
 interface PortfolioSource {
     interface Remote {
@@ -9,10 +9,8 @@ interface PortfolioSource {
 
     // NON DATABASE
     interface Local {
-        suspend fun getErrorMessage(): String
-        suspend fun setErrorMessage(message: String)
-        suspend fun getThemeMode(): ThemeMode
-        suspend fun setThemeMode(theme: ThemeMode)
+        suspend fun getThemePreference(): DarkThemePreference
+        suspend fun setThemePreference(isDarkTheme: Int)
         suspend fun getThemeColor(): Long
         suspend fun setThemeColor(color: String)
     }

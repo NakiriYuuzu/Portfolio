@@ -18,7 +18,7 @@ import core.domain.source.PortfolioSource
 import core.presentation.theme.Theme
 import core.presentation.theme.seed
 import core.util.LocalWindowSizeClass
-import core.util.toColor
+import core.util.extension.toColor
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
@@ -29,12 +29,13 @@ import org.koin.compose.getKoin
 @Preview
 internal fun App() {
     KoinContext {
+        val local: PortfolioSource.Local = getKoin().get()
+
         CompositionLocalProvider(
             LocalWindowSizeClass provides calculateWindowSizeClass()
         ) {
-            val local: PortfolioSource.Local = getKoin().get()
+
             val coroutineScope = rememberCoroutineScope()
-            var errorMessage by rememberSaveable { mutableStateOf("") }
             var seedColor by rememberSaveable { mutableStateOf(seed) }
             val state = rememberDynamicMaterialThemeState(
                 seedColor = seedColor,
@@ -42,8 +43,7 @@ internal fun App() {
                 style = PaletteStyle.Content
             )
 
-            LaunchedEffect(errorMessage) {
-                errorMessage = local.getErrorMessage().ifEmpty { "Click Me!" }
+            LaunchedEffect(seedColor) {
                 seedColor = local.getThemeColor().toColor()
             }
 
@@ -58,12 +58,10 @@ internal fun App() {
                         val randomColor = (0..0xFFFFFF).random()
                         seedColor = Color(randomColor)
                         coroutineScope.launch {
-                            local.setErrorMessage("SeedColor: ${11596523.toString(16)} RandomColor: ${randomColor.toString(16)}")
                             local.setThemeColor(randomColor.toString())
-                            errorMessage = local.getErrorMessage()
                         }
                     }) {
-                        Text(text = errorMessage)
+                        Text(text = "Click Me!")
                     }
                 }
             }
