@@ -179,8 +179,3 @@ compose.desktop {
         }
     }
 }
-
-// Until iOS Safari supports wasm, we need to use JavaScript
-compose.experimental {
-    web.application {}
-}
