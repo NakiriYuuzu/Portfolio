@@ -1,3 +1,4 @@
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicMaterialThemeState
+import core.domain.source.PortfolioSource
 import core.presentation.theme.Theme
 import core.presentation.theme.seed
 import core.util.LocalWindowSizeClass
+import core.util.toColor
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
+import org.koin.compose.getKoin
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
@@ -27,13 +32,22 @@ internal fun App() {
         CompositionLocalProvider(
             LocalWindowSizeClass provides calculateWindowSizeClass()
         ) {
-            var isDarkTheme by rememberSaveable { mutableStateOf(false) }
+            val local: PortfolioSource.Local = getKoin().get()
+            val coroutineScope = rememberCoroutineScope()
+            var errorMessage by rememberSaveable { mutableStateOf("") }
             var seedColor by rememberSaveable { mutableStateOf(seed) }
             val state = rememberDynamicMaterialThemeState(
                 seedColor = seedColor,
-                isDark = isDarkTheme,
+                isDark = isSystemInDarkTheme(),
                 style = PaletteStyle.Content
             )
+
+
+
+            LaunchedEffect(errorMessage) {
+                errorMessage = local.getErrorMessage().ifEmpty { "Click Me!" }
+                seedColor = local.getThemeColor().toColor()
+            }
 
             Theme(state = state) {
                 Column(
@@ -43,10 +57,15 @@ internal fun App() {
                 ) {
                     Text(text = "Current Platform: wasmJS!", style = MaterialTheme.typography.displayLarge)
                     Button(onClick = {
-                        seedColor = Color((0..0xFFFFFF).random())
-                        isDarkTheme = !isDarkTheme
+                        val randomColor = (0..0xFFFFFF).random()
+                        seedColor = Color(randomColor)
+                        coroutineScope.launch {
+                            local.setErrorMessage("New Color: $seedColor")
+                            local.setThemeColor(randomColor.toString())
+                            errorMessage = local.getErrorMessage()
+                        }
                     }) {
-                        Text(text = "Click me!")
+                        Text(text = errorMessage)
                     }
                 }
             }

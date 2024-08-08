@@ -25,15 +25,18 @@ lifecycle = "2.8.0"
 navigation = "2.8.0-alpha08"
 
 # UI
-coil = "3.0.0-alpha08"
+coil = "3.0.0-alpha09"
 kolor = "1.7.0"
 windowSizeClass = "0.5.0"
 
 # Local
 datastore = "1.1.1"
+room = "2.7.0-alpha06"
+sqlite = "2.5.0-alpha06"
+multiplatformSettings = "1.1.1"
 
 # Network
-ktor = "3.0.0-wasm2"
+ktor = "3.0.0-beta-2"
 
 # Dependency Injection
 koin = "4.0.0-RC1"
@@ -68,12 +71,18 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 # Theme & UI
 kolor-core = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
 windowSizeClass-core = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSizeClass" }
-coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 
 # Local
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-runtime-android = { module = "androidx.room:room-runtime-android", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 datastore-core = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-pref = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+multiplatform-settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatformSettings" }
+multiplatform-settings-noArgs = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
 
 # Network
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -105,11 +114,13 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 ui = ["kolor-core", "windowSizeClass-core"]
 core = ["lifecycle-runtime", "lifecycle-viewmodel", "navigation-compose"]
 coil = ["coil-compose", "coil-network-ktor"]
+room = ["room-runtime", "sqlite-bundled"]
 ktor = ["ktor-client-core", "ktor-client-json", "ktor-client-logging", "ktor-client-auth", "ktor-client-serialization", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json"]
 debug = ["kermit-core"]
 kotlinx = ["kotlinx-datetime", "kotlinx-serialization"]
