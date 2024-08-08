@@ -69,14 +69,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Fetch latest develop branch
+        run: git fetch origin develop
+
       - name: Create temporary branch
-        run: |
-          git fetch origin
-          git checkout -b release origin/develop
+        run: git checkout -b release origin/develop
 
       - name: Push temporary branch
-        run: |
-          git push origin release
+        run: git push origin release
 
       - name: Create PR to master
         uses: peter-evans/create-pull-request@v6
