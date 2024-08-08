@@ -1,7 +1,9 @@
 package feature.setting
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import core.domain.model.DarkThemePreference
 import core.domain.repository.SettingRepository
 import core.util.extension.toColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +25,20 @@ class SettingViewModel(
                 seedColor = themeColor.toColor(),
                 darkTheme = themePreference
             )
+        }
+    }
+
+    fun onThemeColorChanged(color: Long) {
+        viewModelScope.launch {
+            settingRepository.setThemeColor(color)
+            _state.value = _state.value.copy(seedColor = Color(color))
+        }
+    }
+
+    fun onThemePreferenceChanged(isDarkTheme: Int) {
+        viewModelScope.launch {
+            settingRepository.setThemePreference(isDarkTheme)
+            _state.value = _state.value.copy(darkTheme = DarkThemePreference(isDarkTheme))
         }
     }
 }

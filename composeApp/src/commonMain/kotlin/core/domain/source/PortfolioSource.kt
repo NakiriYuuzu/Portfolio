@@ -12,6 +12,6 @@ interface PortfolioSource {
         suspend fun getThemePreference(): DarkThemePreference
         suspend fun setThemePreference(isDarkTheme: Int)
         suspend fun getThemeColor(): Long
-        suspend fun setThemeColor(color: String)
+        suspend fun setThemeColor(color: Long)
     }
 }

@@ -25,6 +25,8 @@ fun AppSettingProvider(
             style = PaletteStyle.Content
         )
 
+        println(themeState.seedColor)
+
         CompositionLocalProvider(
             LocalDarkTheme provides state.darkTheme,
             LocalSeedColor provides state.seedColor,

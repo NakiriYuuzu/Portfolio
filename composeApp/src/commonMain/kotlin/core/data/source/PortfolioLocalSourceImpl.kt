@@ -28,9 +28,9 @@ class PortfolioLocalSourceImpl(
             settings.getLong(THEME_COLOR_THEME_KEY, 0)
         }
 
-    override suspend fun setThemeColor(color: String) =
+    override suspend fun setThemeColor(color: Long) =
         withContext(dispatcherProvider.io) {
-            settings[THEME_COLOR_THEME_KEY] = color.toLong()
+            settings[THEME_COLOR_THEME_KEY] = color
         }
 
     companion object {

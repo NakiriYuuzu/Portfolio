@@ -3,15 +3,16 @@ package core.presentation.theme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import com.materialkolor.DynamicMaterialTheme
-import com.materialkolor.DynamicMaterialThemeState
+import core.util.LocalDynamicThemeState
 
 @Composable
 internal fun Theme(
-    state: DynamicMaterialThemeState,
     content: @Composable () -> Unit
 ) {
+    val themeState = LocalDynamicThemeState.current
+
     DynamicMaterialTheme(
-        state = state,
+        state = themeState,
         animate = true,
         typography = SoraTypography(),
         shapes = yuuzuShape,

@@ -1,70 +1,88 @@
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.materialkolor.PaletteStyle
-import com.materialkolor.rememberDynamicMaterialThemeState
-import core.domain.source.PortfolioSource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import core.domain.model.DarkThemePreference
 import core.presentation.theme.Theme
-import core.presentation.theme.seed
-import core.util.LocalWindowSizeClass
-import core.util.extension.toColor
-import kotlinx.coroutines.launch
+import core.util.LocalDynamicThemeState
+import feature.AppSettingProvider
+import feature.setting.SettingViewModel
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
-import org.koin.compose.getKoin
+import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 @Preview
 internal fun App() {
     KoinContext {
-        val local: PortfolioSource.Local = getKoin().get()
+        val viewModel = koinViewModel<SettingViewModel>()
+        val state by viewModel.state.collectAsStateWithLifecycle()
+        val navController = rememberNavController()
 
-        CompositionLocalProvider(
-            LocalWindowSizeClass provides calculateWindowSizeClass()
-        ) {
-
-            val coroutineScope = rememberCoroutineScope()
-            var seedColor by rememberSaveable { mutableStateOf(seed) }
-            val state = rememberDynamicMaterialThemeState(
-                seedColor = seedColor,
-                isDark = isSystemInDarkTheme(),
-                style = PaletteStyle.Content
-            )
-
-            LaunchedEffect(seedColor) {
-                seedColor = local.getThemeColor().toColor()
-            }
-
-            Theme(state = state) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
+        AppSettingProvider(state = state) {
+            Theme {
+                NavHost(
+                    navController = navController,
+                    startDestination = Home
                 ) {
-                    Text(text = "Current Platform: wasmJS!", style = MaterialTheme.typography.displayLarge)
-                    Button(onClick = {
-                        val randomColor = (0..0xFFFFFF).random()
-                        seedColor = Color(randomColor)
-                        coroutineScope.launch {
-                            local.setThemeColor(randomColor.toString())
+                    composable<Home> {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = state.seedColor)
+                        ) {
+                            Text(text = "Current Platform: wasmJS!", style = MaterialTheme.typography.displayLarge)
+                            Button(onClick = { navController.navigate(Setting) }) {
+                                Text(text = "Go to Setting")
+                            }
                         }
-                    }) {
-                        Text(text = "Click Me!")
+                    }
+                    composable<Setting> {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Button(onClick = { navController.navigateUp() }) {
+                                Text(text = "Go to Home")
+                            }
+                            Button(onClick = {
+                                val randomColor = (0xFF000000..0xFFFFFFFF).random()
+                                viewModel.onThemeColorChanged(randomColor)
+                                println(randomColor)
+                            }) {
+                                Text(text = "Change Color!")
+                            }
+
+                            val darkTheme = if (state.darkTheme.isDarkTheme()) DarkThemePreference.OFF else DarkThemePreference.ON
+
+                            Button(onClick = {
+                                viewModel.onThemePreferenceChanged(darkTheme)
+                            }) {
+                                Text(text = "Change Theme!")
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
+@Serializable
+object Home
+@Serializable
+object Setting

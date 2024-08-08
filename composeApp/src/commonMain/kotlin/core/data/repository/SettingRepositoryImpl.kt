@@ -13,5 +13,5 @@ class SettingRepositoryImpl(
 
     override suspend fun getThemeColor(): Long = localSource.getThemeColor()
 
-    override suspend fun setThemeColor(color: String) = localSource.setThemeColor(color)
+    override suspend fun setThemeColor(color: Long) = localSource.setThemeColor(color)
 }
