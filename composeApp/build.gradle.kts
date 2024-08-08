@@ -180,6 +180,10 @@ compose.desktop {
     }
 }
 
+// Until iOS Safari supports wasm, we need to use JavaScript
 compose.experimental {
     web.application {}
+}
+tasks.named("jsBrowserProductionWebpack") {
+    dependsOn(tasks.named("wasmJsProductionExecutableCompileSync"))
 }
