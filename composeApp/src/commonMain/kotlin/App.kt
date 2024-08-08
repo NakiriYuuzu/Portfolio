@@ -65,6 +65,7 @@ internal fun App() {
                             errorMessage = local.getErrorMessage()
                         }
                     }) {
+
                         Text(text = errorMessage)
                     }
                 }

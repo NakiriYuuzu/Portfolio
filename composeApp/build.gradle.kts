@@ -31,6 +31,17 @@ kotlin {
         }
         binaries.executable()
     }
+
+    // Until iOS Safari supports wasm, we need to use JavaScript
+    js(IR) {
+        moduleName = "composeApp"
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+            }
+            binaries.executable()
+        }
+    }
     
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -167,4 +178,8 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+compose.experimental {
+    web.application {}
 }

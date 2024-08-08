@@ -34,9 +34,10 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          ./gradlew wasmJsBrowserDistribution
-          mkdir -p out
-          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/
+          mkdir -p out/js out/wasmJs
+          cp -r kotlin-js-template/* out/
+          cp -r composeApp/build/dist/js/productionExecutable/* out/js/
+          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/wasmJs/
           cd out
           git init
           git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
@@ -44,15 +45,6 @@ jobs:
           git add .
           git commit -m "Deploy to GitHub Pages (test)"
           git push -f origin test
-
-      - name: Create PR to release
-        if: success()
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: release
-          title: 'Merge develop into release'
-          body: 'Auto-generated PR to merge changes from develop to release.'
 
   create-pr-to-master:
     runs-on: ubuntu-latest
