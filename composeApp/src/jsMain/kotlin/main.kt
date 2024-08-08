@@ -1,7 +1,7 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.window.ComposeViewport
+import androidx.compose.ui.window.CanvasBasedWindow
 import di.appModules
-import kotlinx.browser.document
+import org.jetbrains.skiko.wasm.onWasmReady
 import org.koin.core.context.startKoin
 import org.koin.core.logger.PrintLogger
 import org.koin.core.logger.Level.DEBUG
@@ -12,7 +12,7 @@ fun main() {
         logger(PrintLogger(level = DEBUG))
         modules(appModules)
     }
-    return ComposeViewport(document.body!!) {
-        App()
+    onWasmReady {
+        CanvasBasedWindow(canvasElementId = "ComposeTarget") { App() }
     }
 }

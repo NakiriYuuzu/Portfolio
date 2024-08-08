@@ -31,6 +31,17 @@ kotlin {
         }
         binaries.executable()
     }
+
+    // Until iOS Safari supports wasm, we need to use JavaScript
+    js(IR) {
+        moduleName = "composeApp"
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+            }
+            binaries.executable()
+        }
+    }
     
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -72,7 +83,6 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.bundles.koin.android)
             implementation(libs.kotlinx.coroutines.android)
-//            implementation(libs.bundles.datastore)
         }
         commonMain.dependencies {
             implementation(compose.ui)
@@ -91,16 +101,15 @@ kotlin {
             implementation(libs.bundles.koin.core)
             implementation(libs.bundles.debug)
             implementation(libs.bundles.kotlinx)
+            implementation(libs.multiplatform.settings.noArgs)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
-//            implementation(libs.bundles.datastore)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.swing)
-//            implementation(libs.bundles.datastore)
         }
     }
 
@@ -169,4 +178,9 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+// Until iOS Safari supports wasm, we need to use JavaScript
+compose.experimental {
+    web.application {}
 }
