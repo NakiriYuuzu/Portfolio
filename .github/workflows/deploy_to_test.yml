@@ -22,11 +22,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Install dependencies and build
-        run: ./gradlew clean build
+      - name: Clean dependency
+        run: ./gradlew clean
 
       - name: Run tests
         run: ./gradlew test --stacktrace
+
+      - name: Build WasmJs
+        run: ./gradlew wasmJsBrowserDistribution
+
+      - name: Build Js
+        run: ./gradlew jsBrowserDistribution
 
       - name: Deploy to GitHub Pages (test)
         if: success()
