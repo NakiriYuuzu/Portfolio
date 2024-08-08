@@ -184,6 +184,6 @@ compose.desktop {
 compose.experimental {
     web.application {}
 }
-tasks.named("jsBrowserProductionWebpack") {
-    dependsOn(tasks.named("wasmJsProductionExecutableCompileSync"))
+tasks.named("wasmJsBrowserProductionWebpack") {
+    mustRunAfter(tasks.named("jsProductionExecutableCompileSync"))
 }

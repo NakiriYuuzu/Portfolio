@@ -42,8 +42,6 @@ internal fun App() {
                 style = PaletteStyle.Content
             )
 
-
-
             LaunchedEffect(errorMessage) {
                 errorMessage = local.getErrorMessage().ifEmpty { "Click Me!" }
                 seedColor = local.getThemeColor().toColor()
@@ -60,12 +58,11 @@ internal fun App() {
                         val randomColor = (0..0xFFFFFF).random()
                         seedColor = Color(randomColor)
                         coroutineScope.launch {
-                            local.setErrorMessage("New Color: $seedColor")
+                            local.setErrorMessage("SeedColor: ${11596523.toString().toColor()} RandomColor: ${randomColor.toString().toColor()}")
                             local.setThemeColor(randomColor.toString())
                             errorMessage = local.getErrorMessage()
                         }
                     }) {
-
                         Text(text = errorMessage)
                     }
                 }
