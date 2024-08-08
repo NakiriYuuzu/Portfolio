@@ -20,20 +20,30 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
       - name: Clean dependency
-        run: ./gradlew clean
+        run: ./gradlew clean --daemon
 
       - name: Run tests
-        run: ./gradlew test --stacktrace
+        run: ./gradlew test --stacktrace --daemon
 
       - name: Build WasmJs
-        run: ./gradlew wasmJsBrowserDistribution
+        run: ./gradlew wasmJsBrowserDistribution --daemon
 
       - name: Build Js
-        run: ./gradlew jsBrowserDistribution
+        run: ./gradlew jsBrowserDistribution --daemon
 
       - name: Deploy to GitHub Pages (gh-pages)
         run: |
