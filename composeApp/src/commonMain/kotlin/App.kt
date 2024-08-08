@@ -58,7 +58,7 @@ internal fun App() {
                         val randomColor = (0..0xFFFFFF).random()
                         seedColor = Color(randomColor)
                         coroutineScope.launch {
-                            local.setErrorMessage("SeedColor: ${11596523.toString().toColor()} RandomColor: ${randomColor.toString().toColor()}")
+                            local.setErrorMessage("SeedColor: ${11596523.toString(16)} RandomColor: ${randomColor.toString(16)}")
                             local.setThemeColor(randomColor.toString())
                             errorMessage = local.getErrorMessage()
                         }
