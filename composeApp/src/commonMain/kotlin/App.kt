@@ -14,7 +14,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import core.domain.model.DarkThemePreference
 import core.presentation.theme.Theme
-import core.util.LocalDynamicThemeState
 import feature.AppSettingProvider
 import feature.setting.SettingViewModel
 import kotlinx.serialization.Serializable

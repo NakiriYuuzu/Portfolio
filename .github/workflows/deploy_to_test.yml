@@ -87,4 +87,4 @@ jobs:
           title: 'Merge develop into master'
           body: 'Auto-generated PR to merge changes from develop to master.'
           commit-message: 'Auto-generated PR to merge changes from develop to master.'
-          delete-branch: true
+          delete-branch: false
