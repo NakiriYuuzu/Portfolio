@@ -1,6 +1,5 @@
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import core.navigation.NavRoute
 import core.presentation.theme.Theme
 import feature.AppSettingProvider

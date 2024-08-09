@@ -9,29 +9,29 @@ import portfolio.composeapp.generated.resources.theme_dark_on
 import portfolio.composeapp.generated.resources.theme_follow_system
 
 data class DarkThemePreference(
-    val darkThemeValue: Int = DarkTheme.FOLLOW_SYSTEM.value
+    val darkModeValue: Int = DarkMode.System.value
 ) {
-    enum class DarkTheme(val value: Int) {
-        FOLLOW_SYSTEM(1),
-        ON(2),
-        OFF(3)
+    enum class DarkMode(val value: Int) {
+        System(1),
+        Dark(2),
+        Light(3)
     }
 
     @Composable
     fun isDarkTheme(): Boolean {
-        return when (darkThemeValue) {
-            DarkTheme.FOLLOW_SYSTEM.value -> isSystemInDarkTheme()
-            DarkTheme.ON.value -> true
+        return when (darkModeValue) {
+            DarkMode.System.value -> isSystemInDarkTheme()
+            DarkMode.Dark.value -> true
             else -> false
         }
     }
 
     @Composable
     fun getDarkThemeDesc(): String {
-        return when (darkThemeValue) {
-            DarkTheme.FOLLOW_SYSTEM.value -> stringResource(Res.string.theme_follow_system)
-            DarkTheme.ON.value -> stringResource(Res.string.theme_dark_on)
-            DarkTheme.OFF.value -> stringResource(Res.string.theme_dark_off)
+        return when (darkModeValue) {
+            DarkMode.System.value -> stringResource(Res.string.theme_follow_system)
+            DarkMode.Dark.value -> stringResource(Res.string.theme_dark_on)
+            DarkMode.Light.value -> stringResource(Res.string.theme_dark_off)
             else -> throw IllegalArgumentException("Invalid dark theme value")
         }
     }

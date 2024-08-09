@@ -8,6 +8,7 @@ import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.Dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PortfolioScaffold(
-    scaffoldState: BottomSheetScaffoldState,
+    scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
     sheetPeekHeight: Dp = BottomSheetDefaults.SheetPeekHeight,
     sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     sheetShape: Shape = BottomSheetDefaults.ExpandedShape,

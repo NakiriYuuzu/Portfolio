@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import core.util.extension.safePopBackStack
 import feature.profile.ProfileScreenRoot
 import feature.setting.SettingScreenRoot
 
@@ -56,7 +57,7 @@ private fun NavGraphBuilder.settingGraph(
     ) {
         composable<SettingGroup.SettingScreen> {
             SettingScreenRoot(
-                onBackClicked = { navController.popBackStack() }
+                onBackClicked = { navController.safePopBackStack() }
             )
         }
     }

@@ -15,8 +15,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import core.util.getScreenHeightDp
-import core.util.getScreenWidthDp
+import core.util.LocalScreenSize
 
 @Composable
 fun PortfolioBackground(
@@ -29,13 +28,14 @@ fun PortfolioBackground(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val density = LocalDensity.current
+    val screenSize = LocalScreenSize.current
 
     val screenWidthPx = with(density) {
-        getScreenWidthDp().roundToPx()
+        screenSize.width.roundToPx()
     }
     val smallDimension = minOf(
-        getScreenWidthDp(),
-        getScreenHeightDp()
+        screenSize.width,
+        screenSize.height
     )
     val smallDimensionPx = with(density) {
         smallDimension.roundToPx()

@@ -14,7 +14,7 @@ class PortfolioLocalSourceImpl(
     override suspend fun getThemePreference(): DarkThemePreference =
         withContext(dispatcherProvider.io) {
             DarkThemePreference(
-                settings.getInt(DARK_MODE_KEY, DarkThemePreference.DarkTheme.FOLLOW_SYSTEM.value)
+                settings.getInt(DARK_MODE_KEY, DarkThemePreference.DarkMode.System.value)
             )
         }
 

@@ -141,7 +141,7 @@ modifier: Modifier = Modifier
             ) {
                 options.forEach { option: String ->
                     DropdownMenuItem(
-                        text = { Text(text = option) },
+                        text = { Text(text = option, style = MaterialTheme.typography.bodyMedium) },
                         onClick = {
                             expanded = false
                             focusManager.clearFocus()

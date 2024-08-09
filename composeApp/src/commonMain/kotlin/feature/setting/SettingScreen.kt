@@ -12,10 +12,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import core.domain.model.DarkThemePreference
 import core.presentation.components.PortfolioScaffold
 import core.presentation.components.PortfolioSelectTextField
 import core.presentation.components.PortfolioTopBar
@@ -32,8 +35,9 @@ fun SettingScreenRoot(
     viewModel: SettingViewModel = koinViewModel<SettingViewModel>(),
     onBackClicked: () -> Unit
 ) {
+    val state = viewModel.state.collectAsStateWithLifecycle()
     SettingScreen(
-        state = viewModel.state.value,
+        state = state.value,
         onAction = { action ->
             when (action) {
                 SettingAction.OnBackClicked -> onBackClicked()
@@ -51,16 +55,16 @@ fun SettingScreen(
     onAction: (SettingAction) -> Unit
 ) {
     PortfolioScaffold(
-        scaffoldState = rememberBottomSheetScaffoldState(),
         topAppBar = {
             PortfolioTopBar(
                 showBackButton = true,
                 title = stringResource(Res.string.ui_show_more),
-                onBackClick = { }
+                onBackClick = { onAction(SettingAction.OnBackClicked) }
             )
         },
         sheetContent = { }
     ) { padding ->
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize().padding(padding)
@@ -70,8 +74,7 @@ fun SettingScreen(
             ) {
                 Text(
                     text = stringResource(resource = Res.string.setting_style_title),
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(top = 16.dp)
                 )
                 Row(
@@ -82,22 +85,29 @@ fun SettingScreen(
                     Column(modifier = Modifier.weight(0.6f)) {
                         Text(
                             text = stringResource(resource = Res.string.setting_style_theme_title),
-                            fontWeight = FontWeight.SemiBold,
-                            fontStyle = MaterialTheme.typography.bodyMedium.fontStyle)
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                         Text(
                             text = stringResource(resource = Res.string.setting_style_theme_desc),
-                            fontStyle = MaterialTheme.typography.bodySmall.fontStyle)
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
-//                    PortfolioSelectTextField(
-//                        value = ,
-//                        options = ThemeMode.entries.map { it.name },
-//                        onValueChangedEvent = { value ->
-//                            when (value) {
-//
-//                            }
-//                        },
-//                        modifier = Modifier.weight(0.4f)
-//                    )
+
+                    PortfolioSelectTextField(
+                        value = state.darkTheme.getDarkThemeDesc(),
+                        options = DarkThemePreference.DarkMode.entries.map { it.name },
+                        onValueChangedEvent = { value ->
+                            when (value) {
+                                DarkThemePreference.DarkMode.System.name ->
+                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.System.value))
+                                DarkThemePreference.DarkMode.Dark.name ->
+                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.Dark.value))
+                                DarkThemePreference.DarkMode.Light.name ->
+                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.Light.value))
+                            }
+                        },
+                        modifier = Modifier.weight(0.4f)
+                    )
                 }
                 HorizontalDivider()
             }

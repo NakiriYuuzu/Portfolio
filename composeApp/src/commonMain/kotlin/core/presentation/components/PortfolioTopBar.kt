@@ -58,6 +58,7 @@ fun PortfolioTopBar(
                 Text(
                     text = title,
                     fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
