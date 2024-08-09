@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  test-and-deploy-to-test-pages:
+  test-and-deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
 
@@ -62,29 +62,26 @@ jobs:
           git commit -m "Deploy to GitHub Pages (test)"
           git push -f origin test
 
-  create-pr-to-master:
+      - name: Create release branch
+        if: success()
+        run: |
+          git checkout -b release
+          git push origin release
+
+  create_pull-request:
     runs-on: ubuntu-latest
-    needs: test-and-deploy-to-test-pages
+    needs: test-and-deploy
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch latest develop branch
-        run: git fetch origin develop
-
-      - name: Create temporary branch
-        run: git checkout -b release origin/develop
-
-      - name: Push temporary branch
-        run: git push origin release
-
-      - name: Create PR to master
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: master
-          branch: release # 用於合併的分支
-          title: 'Merge develop into master'
-          body: 'Auto-generated PR to merge changes from develop to master.'
-          commit-message: 'Auto-generated PR to merge changes from develop to master.'
-          delete-branch: false
+          head: release
+          title: 'Release: Develop to Master'
+          body: 'Auto-generated pull request to merge release branch into master.'
+          draft: false
+          reviewers: 'nakiriyuuzu'  # 可選的，指定審查員
