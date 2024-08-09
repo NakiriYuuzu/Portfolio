@@ -28,14 +28,22 @@ class SettingViewModel(
         }
     }
 
-    fun onThemeColorChanged(color: Long) {
+    fun onAction(action: SettingAction) {
+        when (action) {
+            is SettingAction.OnThemeColorChanged -> onThemeColorChanged(action.color)
+            is SettingAction.OnThemePreferenceChanged -> onThemePreferenceChanged(action.mode)
+            else -> Unit
+        }
+    }
+
+    private fun onThemeColorChanged(color: Long) {
         viewModelScope.launch {
             settingRepository.setThemeColor(color)
             _state.value = _state.value.copy(seedColor = Color(color))
         }
     }
 
-    fun onThemePreferenceChanged(isDarkTheme: Int) {
+    private fun onThemePreferenceChanged(isDarkTheme: Int) {
         viewModelScope.launch {
             settingRepository.setThemePreference(isDarkTheme)
             _state.value = _state.value.copy(darkTheme = DarkThemePreference(isDarkTheme))

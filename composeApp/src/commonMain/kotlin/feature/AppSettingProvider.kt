@@ -8,8 +8,12 @@ import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicMaterialThemeState
 import core.util.LocalDarkTheme
 import core.util.LocalDynamicThemeState
+import core.util.LocalScreenSize
 import core.util.LocalSeedColor
 import core.util.LocalWindowSizeClass
+import core.util.ScreenSize
+import core.util.getScreenHeightDp
+import core.util.getScreenWidthDp
 import feature.setting.SettingState
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -25,13 +29,12 @@ fun AppSettingProvider(
             style = PaletteStyle.Content
         )
 
-        println(themeState.seedColor)
-
         CompositionLocalProvider(
             LocalDarkTheme provides state.darkTheme,
             LocalSeedColor provides state.seedColor,
             LocalDynamicThemeState provides themeState,
-            LocalWindowSizeClass provides calculateWindowSizeClass()
+            LocalWindowSizeClass provides calculateWindowSizeClass(),
+            LocalScreenSize provides ScreenSize(width = getScreenWidthDp(), height = getScreenHeightDp())
         ) {
             content()
         }
