@@ -80,7 +80,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: master
-          head: release
+          branch: release
           title: 'Release: Develop to Master'
           body: 'Auto-generated pull request to merge release branch into master.'
           draft: false
