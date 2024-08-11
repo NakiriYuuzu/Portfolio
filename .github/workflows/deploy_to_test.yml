@@ -86,3 +86,4 @@ jobs:
           body: 'Auto-generated pull request to merge release branch into master.'
           draft: false
           reviewers: 'nakiriyuuzu'  # 可選的，指定審查員
+          delete-branch: true
