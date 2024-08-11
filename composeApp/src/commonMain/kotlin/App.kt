@@ -13,11 +13,11 @@ import org.koin.compose.viewmodel.koinViewModel
 internal fun App() {
     KoinContext {
         val viewModel = koinViewModel<SettingViewModel>()
-        val state by viewModel.state.collectAsStateWithLifecycle()
+        val state by viewModel.state.collectAsState()
 
         AppSettingProvider(state = state) {
             Theme {
-               NavRoute()
+               NavRoute(viewModel = viewModel)
             }
         }
     }

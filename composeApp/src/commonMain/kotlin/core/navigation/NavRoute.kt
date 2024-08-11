@@ -10,9 +10,11 @@ import androidx.navigation.navigation
 import core.util.extension.safePopBackStack
 import feature.profile.ProfileScreenRoot
 import feature.setting.SettingScreenRoot
+import feature.setting.SettingViewModel
 
 @Composable
 fun NavRoute(
+    viewModel: SettingViewModel,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -21,7 +23,7 @@ fun NavRoute(
     ) {
         profileGraph(navController)
         portfolioGraph(navController)
-        settingGraph(navController)
+        settingGraph(viewModel, navController)
     }
 }
 
@@ -50,6 +52,7 @@ private fun NavGraphBuilder.portfolioGraph(
 }
 
 private fun NavGraphBuilder.settingGraph(
+    viewModel: SettingViewModel,
     navController: NavHostController
 ) {
     navigation<SettingGroup>(
@@ -57,6 +60,7 @@ private fun NavGraphBuilder.settingGraph(
     ) {
         composable<SettingGroup.SettingScreen> {
             SettingScreenRoot(
+                viewModel = viewModel,
                 onBackClicked = { navController.safePopBackStack() }
             )
         }

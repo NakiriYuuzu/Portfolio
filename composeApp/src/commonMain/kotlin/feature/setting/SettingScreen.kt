@@ -32,7 +32,7 @@ import portfolio.composeapp.generated.resources.ui_show_more
 
 @Composable
 fun SettingScreenRoot(
-    viewModel: SettingViewModel = koinViewModel<SettingViewModel>(),
+    viewModel: SettingViewModel,
     onBackClicked: () -> Unit
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
