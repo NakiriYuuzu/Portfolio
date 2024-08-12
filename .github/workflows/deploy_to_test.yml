@@ -67,24 +67,11 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
 
-      - name: Merge Develop into Release
-        run: |
-          git fetch origin
-          git checkout release || git checkout -b release
-          git merge develop --no-ff --allow-unrelated-histories
-          git commit -m "Merge develop into release"
-          git push origin release || git push origin develop:release --force
-
-      - name: Install GitHub CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install gh
-
-      - name: Create Pull Request
-        run: |
-          # Check if there's any difference between master and release
-          if [ "$(git diff release master)" ]; then
-            gh pr create --base master --head release --title "Release: Develop to Master" --body "Auto-generated pull request to merge release branch into master."
-          else
-            echo "No changes between release and master. Skipping PR creation."
-          fi
+      - name: Create PR to master
+        if: success()
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release
+          title: 'Merge develop into master'
+          body: 'Auto-generated PR to merge changes from develop to master.'
