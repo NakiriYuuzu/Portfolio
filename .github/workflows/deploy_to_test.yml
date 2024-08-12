@@ -57,6 +57,7 @@ jobs:
       
       - name: Rebase Develop into Release
         run: |
+          git checkout release || git checkout -b release
           git rebase develop || git rebase --abort
 
       - name: Push Changes to Release Branch
