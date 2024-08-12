@@ -71,13 +71,9 @@ jobs:
       - name: Check Release Branch
         run: git checkout release || git checkout -b release
 
-      - name: Pull latest changes from release
-        run: git pull origin release --allow-unrelated-histories
-
-      - name: Merge develop into release
+      - name: Force push develop to release
         run: |
-          git merge -s ours develop
-          git push origin release
+          git push origin develop:release --force
 
   create_pull-request:
     runs-on: ubuntu-latest
@@ -101,3 +97,4 @@ jobs:
           title: 'Merge develop into master'
           body: 'Auto-generated PR to merge changes from develop to master.'
           always-create: true
+          delete-branch: true
