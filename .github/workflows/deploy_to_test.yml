@@ -38,42 +38,35 @@ jobs:
       - name: Run tests
         run: ./gradlew test --stacktrace --daemon
 
-      - name: Build WasmJs
-        run: ./gradlew wasmJsBrowserDistribution --daemon
+      # - name: Build WasmJs
+      #   run: ./gradlew wasmJsBrowserDistribution --daemon
 
-      - name: Build Js
-        run: ./gradlew jsBrowserDistribution --daemon
+      # - name: Build Js
+      #   run: ./gradlew jsBrowserDistribution --daemon
 
-      - name: Deploy to GitHub Pages (test)
-        if: success()
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          mkdir -p out/js out/wasmJs
-          cp -r kotlin-js-template/* out/
-          cp -r composeApp/build/dist/js/productionExecutable/* out/js/
-          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/wasmJs/
-          cd out
-          git init
-          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git checkout -b test
-          git add .
-          git commit -m "Deploy to GitHub Pages (test)"
-          git push -f origin test
+      # - name: Deploy to GitHub Pages (test)
+      #   if: success()
+      #   run: |
+      #     git config --global user.name 'github-actions'
+      #     git config --global user.email 'github-actions@github.com'
+      #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+      #     mkdir -p out/js out/wasmJs
+      #     cp -r kotlin-js-template/* out/
+      #     cp -r composeApp/build/dist/js/productionExecutable/* out/js/
+      #     cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/wasmJs/
+      #     cd out
+      #     git init
+      #     git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+      #     git checkout -b test
+      #     git add .
+      #     git commit -m "Deploy to GitHub Pages (test)"
+      #     git push -f origin test
 
-      - name: Create release branch
+      - name: Push develop to release branch
         if: success()
         run: |
           git checkout develop
-          git pull origin develop
-          git checkout -b release
-          git push origin release
-
-      - name: Verify release branch
-        run: |
-          git branch -a
-          git log --oneline -n 5
+          git push origin develop:release --force
 
   create_pull-request:
     runs-on: ubuntu-latest
