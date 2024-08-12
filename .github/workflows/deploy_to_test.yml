@@ -74,42 +74,24 @@ jobs:
         run: |
           git push origin develop:release --force
 
-  create_pull-request:
-    runs-on: ubuntu-latest
-    needs: update-release
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Git Config
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-
-      - name: Check for differences
-        id: check_diff
-        run: |
-          git fetch
-          git fetch origin master
-          git pull
-          git checkout release
-          git pull
-          if git diff --quiet release origin/master; then
-            echo "No changes detected, creating a dummy commit."
-            date >> .github/dummyFile.txt
-            git add .github/dummyFile.txt
-            git commit -m "Dummy commit to force pull request"
-            git push origin release
-          else
-            echo "Changes detected, proceeding to create pull request."
-          fi
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
-          base: release
-          title: 'Merge develop into master'
-          body: 'Auto-generated PR to merge changes from develop to master.'
-          delete-branch: false
+#  create_pull-request:
+#    runs-on: ubuntu-latest
+#    needs: update-release
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Setup Git Config
+#        run: |
+#          git config --global user.name 'github-actions'
+#          git config --global user.email 'github-actions@github.com'
+#
+#      - name: Create Pull Request
+#        uses: peter-evans/create-pull-request@v6
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          branch: master
+#          base: release
+#          title: 'Merge develop into master'
+#          body: 'Auto-generated PR to merge changes from develop to master.'
+#          delete-branch: false
