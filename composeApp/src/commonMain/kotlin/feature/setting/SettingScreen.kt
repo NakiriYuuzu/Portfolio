@@ -10,12 +10,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.domain.model.DarkThemePreference
@@ -23,12 +20,11 @@ import core.presentation.components.PortfolioScaffold
 import core.presentation.components.PortfolioSelectTextField
 import core.presentation.components.PortfolioTopBar
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import portfolio.composeapp.generated.resources.Res
 import portfolio.composeapp.generated.resources.setting_style_theme_desc
 import portfolio.composeapp.generated.resources.setting_style_theme_title
 import portfolio.composeapp.generated.resources.setting_style_title
-import portfolio.composeapp.generated.resources.ui_show_more
+import portfolio.composeapp.generated.resources.setting_title
 
 @Composable
 fun SettingScreenRoot(
@@ -58,7 +54,7 @@ fun SettingScreen(
         topAppBar = {
             PortfolioTopBar(
                 showBackButton = true,
-                title = stringResource(Res.string.ui_show_more),
+                title = stringResource(Res.string.setting_title),
                 onBackClick = { onAction(SettingAction.OnBackClicked) }
             )
         },
@@ -74,25 +70,14 @@ fun SettingScreen(
             ) {
                 Text(
                     text = stringResource(resource = Res.string.setting_style_title),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(top = 16.dp)
                 )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                SettingItem(
+                    title = stringResource(resource = Res.string.setting_style_theme_title),
+                    desc = stringResource(resource = Res.string.setting_style_theme_desc),
                     modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
                 ) {
-                    Column(modifier = Modifier.weight(0.6f)) {
-                        Text(
-                            text = stringResource(resource = Res.string.setting_style_theme_title),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                        Text(
-                            text = stringResource(resource = Res.string.setting_style_theme_desc),
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-
                     PortfolioSelectTextField(
                         value = state.darkTheme.getDarkThemeDesc(),
                         options = DarkThemePreference.DarkMode.entries.map { it.name },
@@ -109,8 +94,58 @@ fun SettingScreen(
                         modifier = Modifier.weight(0.4f)
                     )
                 }
-                HorizontalDivider()
+                SettingItem(
+                    title = stringResource(resource = Res.string.setting_style_theme_title),
+                    desc = stringResource(resource = Res.string.setting_style_theme_desc),
+                    modifier = Modifier.padding(vertical = 16.dp)
+                ) {
+                    PortfolioSelectTextField(
+                        value = state.darkTheme.getDarkThemeDesc(),
+                        options = DarkThemePreference.DarkMode.entries.map { it.name },
+                        onValueChangedEvent = { value ->
+                            when (value) {
+                                DarkThemePreference.DarkMode.System.name ->
+                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.System.value))
+                                DarkThemePreference.DarkMode.Dark.name ->
+                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.Dark.value))
+                                DarkThemePreference.DarkMode.Light.name ->
+                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.Light.value))
+                            }
+                        },
+                        modifier = Modifier.weight(0.4f)
+                    )
+                }
             }
         }
     }
+}
+
+@Composable
+private fun SettingItem(
+    title: String,
+    desc: String,
+    divider: Boolean = true,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+    ) {
+        Column(modifier = Modifier.weight(0.6f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = desc,
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+
+        content()
+    }
+
+    if (divider) HorizontalDivider()
 }
