@@ -72,11 +72,11 @@ jobs:
         run: git checkout release || git checkout -b release
 
       - name: Pull latest changes from release
-        run: git pull origin release
+        run: git pull origin release --allow-unrelated-histories
 
       - name: Merge develop into release
         run: |
-          git merge develop --allow-unrelated-histories
+          git merge -s ours develop
           git push origin release
 
   create_pull-request:
