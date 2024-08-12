@@ -66,8 +66,14 @@ jobs:
         if: success()
         run: |
           git checkout develop
+          git pull origin develop
           git checkout -b release
           git push origin release
+
+      - name: Verify release branch
+        run: |
+          git branch -a
+          git log --oneline -n 5
 
   create_pull-request:
     runs-on: ubuntu-latest
@@ -85,5 +91,5 @@ jobs:
           title: 'Release: Develop to Master'
           body: 'Auto-generated pull request to merge release branch into master.'
           draft: false
-          # reviewers: 'nakiriyuuzu'  # 可選的，指定審查員
+          # reviewers: 'nakiriyuuzu'
           # delete-branch: true
