@@ -89,12 +89,12 @@ jobs:
 
       - name: Create Pull Request
         if: success()
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: release
-          base: master
+          branch: master
+          base: release
           title: 'Merge develop into master'
           body: 'Auto-generated PR to merge changes from develop to master.'
           always-create: true
-          delete-branch: true
+          delete-branch: false
