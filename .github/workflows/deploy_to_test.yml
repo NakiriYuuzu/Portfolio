@@ -55,19 +55,13 @@ jobs:
       #     git commit -m "Deploy to GitHub Pages (test)"
       #     git push -f origin test
       
-      - name: Checkout Release Branch
-        if: success()
+      - name: Rebase Develop into Release
         run: |
-          git fetch origin
-          git checkout release
+          git rebase develop || git rebase --abort
 
-      - name: Merge Develop into Release
+      - name: Push Changes to Release Branch
         run: |
-          git merge develop --no-ff
-
-      - name: Push develop to release branch
-        run: |
-          git push origin develop:release --force
+          git push origin release || git push origin develop:release --force   
 
   create_pull-request:
     runs-on: ubuntu-latest
