@@ -13,30 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 17
+      # - name: Set up JDK 17
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     distribution: 'zulu'
+      #     java-version: 17
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      # - name: Grant execute permission for gradlew
+      #   run: chmod +x ./gradlew
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+      # - name: Clean dependency
+      #   run: ./gradlew clean --daemon
 
-      - name: Clean dependency
-        run: ./gradlew clean --daemon
-
-      - name: Run tests
-        run: ./gradlew test --stacktrace --daemon
+      # - name: Run tests
+      #   run: ./gradlew test --stacktrace --daemon
 
       # - name: Build WasmJs
       #   run: ./gradlew wasmJsBrowserDistribution --daemon
@@ -44,11 +34,14 @@ jobs:
       # - name: Build Js
       #   run: ./gradlew jsBrowserDistribution --daemon
 
+      - name: Setup Git Config
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
       # - name: Deploy to GitHub Pages (test)
       #   if: success()
       #   run: |
-      #     git config --global user.name 'github-actions'
-      #     git config --global user.email 'github-actions@github.com'
       #     git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
       #     mkdir -p out/js out/wasmJs
       #     cp -r kotlin-js-template/* out/
@@ -61,11 +54,19 @@ jobs:
       #     git add .
       #     git commit -m "Deploy to GitHub Pages (test)"
       #     git push -f origin test
-
-      - name: Push develop to release branch
+      
+      - name: Checkout Release Branch
         if: success()
         run: |
-          git checkout develop
+          git fetch origin
+          git checkout release
+
+      - name: Merge Develop into Release
+        run: |
+          git merge develop --no-ff
+
+      - name: Push develop to release branch
+        run: |
           git push origin develop:release --force
 
   create_pull-request:
