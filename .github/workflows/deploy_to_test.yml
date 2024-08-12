@@ -89,8 +89,11 @@ jobs:
       - name: Check for differences
         id: check_diff
         run: |
+          git fetch
           git fetch origin master
+          git pull
           git checkout release
+          git pull
           if git diff --quiet release origin/master; then
             echo "No changes detected, creating a dummy commit."
             date >> .github/dummyFile.txt
