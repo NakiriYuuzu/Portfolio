@@ -59,7 +59,7 @@ jobs:
         run: |
           git fetch origin
           git checkout release || git checkout -b release
-          git merge develop || git merge develop --no-ff --allow-unrelated-histories
+          git merge develop --no-ff --allow-unrelated-histories
           git push origin release || git push origin develop:release --force
 
   create_pull-request:
