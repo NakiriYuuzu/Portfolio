@@ -76,7 +76,7 @@ jobs:
 
       - name: Merge develop into release
         run: |
-          git merge -s ours develop --allow-unrelated-histories
+          git merge develop --allow-unrelated-histories
           git push origin release
 
   create_pull-request:
@@ -100,3 +100,4 @@ jobs:
           base: master
           title: 'Merge develop into master'
           body: 'Auto-generated PR to merge changes from develop to master.'
+          always-create: true
