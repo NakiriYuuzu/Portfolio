@@ -76,7 +76,7 @@ jobs:
 
       - name: Merge develop into release
         run: |
-          git merge -s ours develop
+          git merge -s ours develop --allow-unrelated-histories
           git push origin release
 
   create_pull-request:
