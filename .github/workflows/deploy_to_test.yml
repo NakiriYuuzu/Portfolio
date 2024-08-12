@@ -66,6 +66,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
+          git config pull.rebase false
 
       - name: Check Release Branch
         run: git checkout release || git checkout -b release
