@@ -68,7 +68,10 @@ jobs:
           git config --global user.email 'github-actions@github.com'
 
       - name: Check Release Branch
-        run: git checkout -b release
+        run: git checkout release || git checkout -b release
+
+      - name: Pull latest changes from release
+        run: git pull origin release
 
       - name: Merge develop into release
         run: |
