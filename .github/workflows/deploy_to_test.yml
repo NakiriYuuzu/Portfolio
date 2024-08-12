@@ -72,12 +72,12 @@ jobs:
 
       - name: Merge develop into release
         run: |
-          git merge develop
+          git merge -s ours develop
           git push origin release
 
   create_pull-request:
     runs-on: ubuntu-latest
-#    needs: test-and-deploy
+    needs: update-release
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
