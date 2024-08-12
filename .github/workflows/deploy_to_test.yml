@@ -72,6 +72,7 @@ jobs:
           git fetch origin
           git checkout release || git checkout -b release
           git merge develop --no-ff --allow-unrelated-histories
+          git commit -m "Merge develop into release"
           git push origin release || git push origin develop:release --force
 
       - name: Install GitHub CLI
