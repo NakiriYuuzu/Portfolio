@@ -4,6 +4,7 @@ import core.data.di.dataModule
 import core.domain.di.domainModule
 import core.logging.di.loggingModule
 import core.util.di.utilityModule
+import feature.di.validatorModule
 import feature.di.viewModelModule
 
 internal val appModules = listOf(
@@ -12,5 +13,6 @@ internal val appModules = listOf(
     loggingModule,
     dataModule,
     domainModule,
+    validatorModule,
     viewModelModule
 )

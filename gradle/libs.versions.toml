@@ -10,7 +10,7 @@ androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.6.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
-compose-plugin = "1.7.0-alpha02"
+compose-plugin = "1.7.0-alpha03"
 junit = "4.13.2"
 kotlin = "2.0.10"
 
@@ -21,13 +21,14 @@ kotlinx-coroutines = "1.9.0-RC"
 kotlinx-datetime = "0.6.0"
 
 # Core
+adaptive = "1.0.0-alpha01"
 lifecycle = "2.8.0"
-navigation = "2.8.0-alpha08"
+navigation = "2.8.0-alpha09"
+windowSizeClass = "1.7.0-alpha03"
 
 # UI
 coil = "3.0.0-alpha09"
 kolor = "1.7.0"
-windowSizeClass = "0.5.0"
 
 # Local
 datastore = "1.1.1"
@@ -67,10 +68,14 @@ kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+windowSizeClass = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "windowSizeClass" }
+adaptive-core = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
+adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
+adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
 
 # Theme & UI
 kolor-core = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
-windowSizeClass-core = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSizeClass" }
+windowSizeClass-core = { module = "dev.chrisbanes.material3:material3-window-size-class-multiplatform", version.ref = "windowSizeClass" } # 0.5.0 version
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 
@@ -117,8 +122,8 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
-ui = ["kolor-core", "windowSizeClass-core"]
-core = ["lifecycle-runtime", "lifecycle-viewmodel", "navigation-compose"]
+ui = ["kolor-core"]
+core = ["lifecycle-runtime", "lifecycle-viewmodel", "navigation-compose", "windowSizeClass", "adaptive-core", "adaptive-layout", "adaptive-navigation"]
 coil = ["coil-compose", "coil-network-ktor"]
 room = ["room-runtime", "sqlite-bundled"]
 ktor = ["ktor-client-core", "ktor-client-json", "ktor-client-logging", "ktor-client-auth", "ktor-client-serialization", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json"]

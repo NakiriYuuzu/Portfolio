@@ -32,3 +32,11 @@ internal fun String.toColor(): Color {
 internal fun Long.toColor(): Color {
     return Color(this)
 }
+/**
+ * Convert a color to a string color
+ * e.g. Color(0xFF63A002) -> "63A002"
+ * @return a string color
+ */
+internal fun Color.toStringColor(): String {
+    return this.value.toString(16).padStart(8, '0').substring(2).uppercase()
+}

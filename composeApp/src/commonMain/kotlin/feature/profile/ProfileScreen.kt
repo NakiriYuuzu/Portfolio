@@ -11,7 +11,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import core.presentation.components.PortfolioScaffold
+import core.presentation.components.PortfolioSheetScaffold
 
 @Composable
 fun ProfileScreenRoot(
@@ -24,9 +24,8 @@ fun ProfileScreenRoot(
 @Composable
 fun ProfileScreen(
     onSettingClick: () -> Unit,
-//    onAction: (ProfileAction) -> Unit
 ) {
-    PortfolioScaffold(
+    PortfolioSheetScaffold(
         scaffoldState = rememberBottomSheetScaffoldState(),
         sheetContent = { Content(onSettingClick) }
     ) {

@@ -1,11 +1,14 @@
 package feature.setting
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -13,11 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import core.domain.model.DarkThemePreference
 import core.presentation.components.PortfolioScaffold
 import core.presentation.components.PortfolioSelectTextField
+import core.presentation.components.PortfolioTextField
 import core.presentation.components.PortfolioTopBar
 import org.jetbrains.compose.resources.stringResource
 import portfolio.composeapp.generated.resources.Res
@@ -32,6 +37,7 @@ fun SettingScreenRoot(
     onBackClicked: () -> Unit
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
+
     SettingScreen(
         state = state.value,
         onAction = { action ->
@@ -58,7 +64,6 @@ fun SettingScreen(
                 onBackClick = { onAction(SettingAction.OnBackClicked) }
             )
         },
-        sheetContent = { }
     ) { padding ->
 
         Column(
@@ -99,17 +104,17 @@ fun SettingScreen(
                     desc = stringResource(resource = Res.string.setting_style_theme_desc),
                     modifier = Modifier.padding(vertical = 16.dp)
                 ) {
-                    PortfolioSelectTextField(
-                        value = state.darkTheme.getDarkThemeDesc(),
-                        options = DarkThemePreference.DarkMode.entries.map { it.name },
-                        onValueChangedEvent = { value ->
-                            when (value) {
-                                DarkThemePreference.DarkMode.System.name ->
-                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.System.value))
-                                DarkThemePreference.DarkMode.Dark.name ->
-                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.Dark.value))
-                                DarkThemePreference.DarkMode.Light.name ->
-                                    onAction(SettingAction.OnThemePreferenceChanged(DarkThemePreference.DarkMode.Light.value))
+                    PortfolioTextField(
+                        state = state.colorField,
+                        hints = stringResource(resource = Res.string.setting_style_theme_desc),
+                        endIcon = {
+                            if (state.validatorState.isColor) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(MaterialTheme.shapes.small)
+                                        .background(state.seedColor)
+                                )
                             }
                         },
                         modifier = Modifier.weight(0.4f)
