@@ -10,7 +10,7 @@ androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.6.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
-compose-plugin = "1.7.0-beta02"
+compose-plugin = "1.7.0-rc01"
 junit = "4.13.2"
 kotlin = "2.0.20"
 
@@ -21,14 +21,13 @@ kotlinx-coroutines = "1.9.0"
 kotlinx-datetime = "0.6.1"
 
 # Core
-adaptive = "1.0.0-alpha03"
+adaptive = "1.0.0-rc01"
 lifecycle = "2.8.2"
 navigation = "2.8.0-alpha10"
-windowSizeClass = "1.7.0-alpha03"
 
 # UI
 coil = "3.0.0-alpha10"
-kolor = "1.7.1"
+kolor = "2.0.0"
 
 # Local
 datastore = "1.1.1"
@@ -68,10 +67,6 @@ kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 lifecycle-runtime = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
-windowSizeClass = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "windowSizeClass" }
-adaptive-core = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
-adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
-adaptive-navigation = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
 
 # Theme & UI
 kolor-core = { module = "com.materialkolor:material-kolor", version.ref = "kolor" }
@@ -122,7 +117,7 @@ room = { id = "androidx.room", version.ref = "room" }
 
 [bundles]
 ui = ["kolor-core"]
-core = ["lifecycle-runtime", "lifecycle-viewmodel", "navigation-compose", "windowSizeClass", "adaptive-core", "adaptive-layout", "adaptive-navigation"]
+core = ["lifecycle-runtime", "lifecycle-viewmodel", "navigation-compose"]
 coil = ["coil-compose", "coil-network-ktor"]
 room = ["room-runtime", "sqlite-bundled"]
 ktor = ["ktor-client-core", "ktor-client-json", "ktor-client-logging", "ktor-client-auth", "ktor-client-serialization", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json"]

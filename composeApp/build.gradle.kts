@@ -89,9 +89,11 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.animation)
             implementation(compose.foundation)
+            implementation(compose.runtimeSaveable)
             implementation(compose.components.resources)
             implementation(compose.materialIconsExtended)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.material3AdaptiveNavigationSuite)
 
             implementation(libs.bundles.ui)
             implementation(libs.bundles.core)
