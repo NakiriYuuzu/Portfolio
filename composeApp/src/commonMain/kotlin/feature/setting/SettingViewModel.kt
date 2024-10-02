@@ -9,7 +9,10 @@ import core.util.extension.toColor
 import core.util.extension.toStringColor
 import feature.setting.validator.SettingValidator
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
@@ -17,9 +20,19 @@ class SettingViewModel(
     private val settingRepository: SettingRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(SettingState())
-    val state = _state.asStateFlow()
+    val state = _state
+        .onStart { execute() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000),SettingState())
 
-    init {
+    fun onAction(action: SettingAction) {
+        when (action) {
+            is SettingAction.OnThemeColorChanged -> onThemeColorChanged(action.color)
+            is SettingAction.OnThemePreferenceChanged -> onThemePreferenceChanged(action.mode)
+            else -> Unit
+        }
+    }
+
+    private fun execute() {
         viewModelScope.launch {
             val themeColor = settingRepository.getThemeColor()
             val themePreference = settingRepository.getThemePreference()
@@ -30,14 +43,6 @@ class SettingViewModel(
                 darkTheme = themePreference,
                 validatorState = validatorState
             )
-        }
-    }
-
-    fun onAction(action: SettingAction) {
-        when (action) {
-            is SettingAction.OnThemeColorChanged -> onThemeColorChanged(action.color)
-            is SettingAction.OnThemePreferenceChanged -> onThemePreferenceChanged(action.mode)
-            else -> Unit
         }
     }
 
