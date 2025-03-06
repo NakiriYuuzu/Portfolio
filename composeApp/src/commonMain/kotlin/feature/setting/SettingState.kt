@@ -12,5 +12,5 @@ data class SettingState(
     val seedColor: Color = seed,
     val darkTheme: DarkThemePreference = DarkThemePreference(),
     val validatorState: SettingValidatorState = SettingValidatorState(),
-    val colorField: TextFieldState = TextFieldState(seedColor.toStringColor())
+    val colorField: TextFieldState = TextFieldState(seed.toStringColor())
 )

@@ -22,17 +22,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Clean dependency
-        run: ./gradlew clean --daemon
-
-      - name: Run tests
-        run: ./gradlew test --stacktrace --daemon
+      - name: Upgrade KotlinYarnLock
+        run: ./gradlew kotlinUpgradeYarnLock --daemon --stacktrace
 
       - name: Build WasmJs
         run: ./gradlew wasmJsBrowserDistribution --daemon
-
-      - name: Build Js
-        run: ./gradlew jsBrowserDistribution --daemon
 
       - name: Setup Git Config
         run: |
@@ -43,10 +37,8 @@ jobs:
         if: success()
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          mkdir -p out/js out/wasmJs
-          cp -r kotlin-js-template/* out/
-          cp -r composeApp/build/dist/js/productionExecutable/* out/js/
-          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/wasmJs/
+          mkdir -p out
+          cp -r composeApp/build/dist/wasmJs/productionExecutable/* out/
           cd out
           git init
           git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
@@ -54,44 +46,3 @@ jobs:
           git add .
           git commit -m "Deploy to GitHub Pages (test)"
           git push -f origin test
-
-  update-release:
-    runs-on: ubuntu-latest
-    needs: test-and-deploy
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Git Config
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-
-      - name: Check Release Branch
-        run: git checkout release || git checkout -b release
-
-      - name: Force push develop to release
-        run: |
-          git push origin develop:release --force
-
-#  create_pull-request:
-#    runs-on: ubuntu-latest
-#    needs: update-release
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v4
-#
-#      - name: Setup Git Config
-#        run: |
-#          git config --global user.name 'github-actions'
-#          git config --global user.email 'github-actions@github.com'
-#
-#      - name: Create Pull Request
-#        uses: peter-evans/create-pull-request@v6
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          branch: master
-#          base: release
-#          title: 'Merge develop into master'
-#          body: 'Auto-generated PR to merge changes from develop to master.'
-#          delete-branch: false

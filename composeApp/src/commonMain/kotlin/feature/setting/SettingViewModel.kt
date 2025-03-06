@@ -1,11 +1,12 @@
 package feature.setting
 
-import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.domain.model.DarkThemePreference
 import core.domain.repository.SettingRepository
 import core.util.extension.toColor
+import core.util.extension.toLongColor
 import core.util.extension.toStringColor
 import feature.setting.validator.SettingValidator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,11 +22,11 @@ class SettingViewModel(
     private val _state = MutableStateFlow(SettingState())
     val state = _state
         .onStart { execute() }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000),SettingState())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingState())
 
     fun onAction(action: SettingAction) {
         when (action) {
-            is SettingAction.OnThemeColorChanged -> onThemeColorChanged(action.color)
+            is SettingAction.OnThemeColorChanged -> onThemeColorChanged(action.colorText)
             is SettingAction.OnThemePreferenceChanged -> onThemePreferenceChanged(action.mode)
             else -> Unit
         }
@@ -35,32 +36,40 @@ class SettingViewModel(
         viewModelScope.launch {
             val themeColor = settingRepository.getThemeColor()
             val themePreference = settingRepository.getThemePreference()
-            val validatorState = settingValidator.validateColor(themeColor.toStringColor())
+            val colorString = themeColor.toStringColor()
+            val validatorState = settingValidator.validateColor(colorString)
 
             _state.value = _state.value.copy(
                 seedColor = themeColor.toColor(),
                 darkTheme = themePreference,
-                validatorState = validatorState
+                validatorState = validatorState,
+                colorField = TextFieldState(colorString)
             )
         }
     }
 
-    private fun onThemeColorChanged(color: Long) {
-//        val colorValidate = settingValidator.validateColor(color)
-//        if (color.length == 6) _state.value = _state.value.copy(
-//            seedColor = Color(color),
-//            validatorState = colorValidate
-//        )
+    private fun onThemeColorChanged(colorText: String) {
+        // 驗證顏色
+        val validatorState = settingValidator.validateColor(colorText)
 
-//        if (colorValidate) {
-//            viewModelScope.launch {
-//                settingRepository.setThemeColor(color)
-//                _state.value = _state.value.copy(seedColor = Color(color))
-//            }
-//        }
-        viewModelScope.launch {
-            settingRepository.setThemeColor(color)
-            _state.value = _state.value.copy(seedColor = Color(color))
+        // 更新輸入框狀態
+        _state.value = _state.value.copy(
+            validatorState = validatorState,
+            colorField = TextFieldState(colorText)
+        )
+
+        // 如果顏色有效，則更新儲存庫
+        if (validatorState.isColor) {
+            viewModelScope.launch {
+                try {
+                    // 將十六進制字符串轉換為 Long (添加 alpha 通道前綴 FF)
+                    val colorLong = colorText.toLongColor()
+                    settingRepository.setThemeColor(colorLong)
+                    _state.value = _state.value.copy(seedColor = colorLong.toColor())
+                } catch (e: Exception) {
+                    // 錯誤處理 - 在實際應用中，可能需要顯示錯誤訊息
+                }
+            }
         }
     }
 

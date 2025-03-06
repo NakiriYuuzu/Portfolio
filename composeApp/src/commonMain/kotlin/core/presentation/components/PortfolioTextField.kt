@@ -46,6 +46,8 @@ fun PortfolioTextField(
     state: TextFieldState,
     hints: String,
     title: String? = null,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
     startIcon: ImageVector? = null,
     endIcon: @Composable (() -> Unit)? = null,
     error: String? = null,
@@ -95,6 +97,8 @@ fun PortfolioTextField(
         Spacer(modifier = Modifier.height(4.dp))
         BasicTextField(
             state = state,
+            enabled = enabled,
+            readOnly = false,
             textStyle = LocalTextStyle.current.copy(
                 color = MaterialTheme.colorScheme.onBackground
             ),

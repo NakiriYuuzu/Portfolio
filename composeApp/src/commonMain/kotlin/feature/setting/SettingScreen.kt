@@ -56,6 +56,7 @@ fun SettingScreen(
     state: SettingState,
     onAction: (SettingAction) -> Unit
 ) {
+
     PortfolioScaffold(
         topAppBar = {
             PortfolioTopBar(
@@ -65,7 +66,6 @@ fun SettingScreen(
             )
         },
     ) { padding ->
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize().padding(padding)
@@ -116,6 +116,9 @@ fun SettingScreen(
                                         .background(state.seedColor)
                                 )
                             }
+                        },
+                        onDone = {
+                            onAction(SettingAction.OnThemeColorChanged(state.colorField.text.toString()))
                         },
                         modifier = Modifier.weight(0.4f)
                     )

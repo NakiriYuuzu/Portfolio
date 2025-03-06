@@ -57,9 +57,9 @@ fun PortfolioBackground(
                         ),
                         center = Offset(
                             x = screenWidthPx / 2f,
-                            y = screenWidthPx / 4f
+                            y = screenWidthPx / (screenWidthPx / 2f)
                         ),
-                        radius = smallDimensionPx / 1.5f
+                        radius = smallDimensionPx / 2f
                     )
                 )
                 .then(if (enableShadow) Modifier.shadow(8.dp) else Modifier)
